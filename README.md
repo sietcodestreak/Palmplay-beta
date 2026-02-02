@@ -1,26 +1,43 @@
 # 🖐️ PalmPlay: Magic Music Hands
 
-Control your music with the wave of a hand! **PalmPlay** uses computer vision and hand tracking to turn your webcam into a touch-free media controller for Spotify and local music files.
+**Control your music with the wave of a hand!**
+
+PalmPlay turns your webcam into a touch-free media controller. Whether you're using the modern web interface or the classic desktop app, you can control Spotify or local music files with simple hand gestures.
+
+---
+
+## ✨ Features
+
+- **Gesture Control**: Play/Pause, Next/Prev Track, and Volume Control using hand signs.
+- **Modern Web Interface**: beautiful Dark Theme UI with Glassmorphism, built with Streamlit.
+- **Classic Desktop Mode**: Lightweight windowed application for quick control.
+- **Spotify Integration**: Seamlessly control your Spotify playback.
+- **Local Music Support**: Play files directly from your local folders.
+- **Visual Feedback**: Real-time gesture tracking and smooth animations.
 
 ---
 
 ## 🚀 Quick Start
 
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-2. **Configure Spotify (Optional)**:
-   For Spotify control, set your credentials as environment variables:
-   - `SPOTIPY_CLIENT_ID`
-   - `SPOTIPY_CLIENT_SECRET`
-   - `SPOTIPY_REDIRECT_URI`
+### 2. Choose Your Interface
 
-3. **Run Application**:
-   ```bash
-   python gesture_spotify_player.py
-   ```
+#### 🌟 Option A: Modern Web App (Recommended)
+Launch the beautiful, feature-rich web interface:
+```bash
+streamlit run app.py
+```
+*Opens in your browser at `http://localhost:8501`*
+
+#### 🖥️ Option B: Classic Desktop App
+Run the lightweight CV window:
+```bash
+python gesture_spotify_player.py
+```
 
 ---
 
@@ -28,37 +45,38 @@ Control your music with the wave of a hand! **PalmPlay** uses computer vision an
 
 The player uses intuitive gestures to control your playback:
 
-- ✊ **Fist**: ⏯️ Toggle Play / Pause
-- 🖐️ **Swipe Right**: ⏭️ Next Track (+ Cycle Instrument Panel)
-- 🖐️ **Swipe Left**: ⏮️ Previous Track (+ Cycle Instrument Panel)
-- ✌️ **Two Fingers (V-Sign)**: 🔊 Control Volume by moving hand **Up or Down**
+| Action | Gesture | Description |
+| :--- | :--- | :--- |
+| **Play / Pause** | ✊ **Fist** | Clench your hand to toggle playback. |
+| **Next Track** | 🖐️ **Swipe Right** | Move your open palm rapidly to the right. |
+| **Prev Track** | 🖐️ **Swipe Left** | Move your open palm rapidly to the left. |
+| **Volume Control** | ✌️ **Two Fingers** | Hold a "Peace" sign and move your hand **Up** or **Down**. |
 
 ---
 
-## 🛠️ Requirements
+## 🛠️ Configuration
 
-- **Python 3.8+**
-- **Webcam**
-- **Core Libraries**:
-  - `opencv-python`: For video processing
-  - `mediapipe`: For hand tracking
-  - `spotipy`: For Spotify integration
-  - `pygame`: For local file playback
-  - `pycaw`: For system volume control (Windows)
-
-Install everything at once:
-```bash
-pip install -r requirements.txt
+### Spotify Setup (Optional)
+To control Spotify, set these environment variables (create a `.env` file):
+```env
+SPOTIPY_CLIENT_ID='your_client_id'
+SPOTIPY_CLIENT_SECRET='your_client_secret'
+SPOTIPY_REDIRECT_URI='http://localhost:8888/callback'
 ```
+
+### Local Music
+Place your `.mp3`, `.wav`, or `.ogg` files in the `local_music/` folder. The app will automatically detect them.
 
 ---
 
 ## 📜 Project Structure
 
-- `gesture_spotify_player.py`: Main application script.
-- `local_music/`: Folder for your `.mp3`, `.wav`, or `.ogg` files.
-- `requirements.txt`: List of necessary Python packages.
-- `check_env.py`: Helper script to verify your setup.
+- **`app.py`**: The modern Streamlit web application.
+- **`gesture_spotify_player.py`**: The core gesture recognition logic and desktop app.
+- **`server.py`**: FastAPI backend for advanced serving capabilities.
+- **`static/`**: Assets for the web interface.
+- **`local_music/`**: Directory for local audio files.
 
 ---
+
 *Created with ❤️ for intuitive music control.*
