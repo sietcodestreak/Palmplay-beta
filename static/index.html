@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PalmPlay - Gesture Music Player</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">🎵 <span>PalmPlay</span></h1>
+                <p class="tagline">Control with gestures</p>
+            </div>
+
+            <div class="folder-picker">
+                <button id="pickFolder" class="btn-primary btn-full">
+                    📁 Choose Music Folder
+                </button>
+                <p id="folderDisplay" class="folder-path">No folder selected</p>
+            </div>
+
+            <div class="playlist-container">
+                <h3>📋 Playlist</h3>
+                <div id="playlist" class="playlist"></div>
+            </div>
+
+            <div class="gesture-guide">
+                <h4>Gesture Controls</h4>
+                <div class="gesture-grid">
+                    <div class="gesture-item">✊<span>Play/Pause</span></div>
+                    <div class="gesture-item">👉<span>Next</span></div>
+                    <div class="gesture-item">👈<span>Previous</span></div>
+                    <div class="gesture-item">✌️<span>Volume</span></div>
+                    <div class="gesture-item">✋<span>Shuffle</span></div>
+                    <div class="gesture-item">👍<span>Repeat</span></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Camera Section -->
+            <section class="camera-section">
+                <div class="section-header">
+                    <h2>📹 Camera Feed</h2>
+                    <button id="toggleCamera" class="btn-secondary">Start Camera</button>
+                </div>
+                <div class="camera-container">
+                    <video id="camera" autoplay playsinline></video>
+                    <canvas id="overlay" class="camera-overlay"></canvas>
+                    <div id="gestureIndicator" class="gesture-indicator hidden"></div>
+                </div>
+            </section>
+
+            <!-- Player Section -->
+            <section class="player-section">
+                <div class="now-playing-card">
+                    <div class="cover-art-container">
+                        <img id="coverArt" src="" alt="Cover Art">
+                        <div class="cover-placeholder">🎵</div>
+                    </div>
+
+                    <div class="track-info">
+                        <h2 id="trackName">No Track Selected</h2>
+                        <p id="trackMeta">Select a folder to start</p>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button id="shuffleBtn" class="control-btn" title="Shuffle">🔀</button>
+                        <button id="prevBtn" class="control-btn" title="Previous">⏮️</button>
+                        <button id="playBtn" class="control-btn play-btn" title="Play/Pause">▶️</button>
+                        <button id="nextBtn" class="control-btn" title="Next">⏭️</button>
+                        <button id="repeatBtn" class="control-btn" title="Repeat">🔁</button>
+                    </div>
+
+                    <div class="volume-control">
+                        <span class="volume-icon">🔊</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                        <span id="volumeValue">50%</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
