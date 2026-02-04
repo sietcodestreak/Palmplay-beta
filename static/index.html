@@ -26,7 +26,13 @@
             </div>
 
             <div class="playlist-container">
-                <h3>📋 Playlist</h3>
+                <div class="playlist-header">
+                    <h3>📋 My Playlist</h3>
+                    <div class="sort-controls">
+                        <button id="sortAlpha" class="sort-btn" title="Sort A-Z">🔤</button>
+                        <button id="sortDuration" class="sort-btn" title="Sort by Duration">🕒</button>
+                    </div>
+                </div>
                 <div id="playlist" class="playlist"></div>
             </div>
 
@@ -68,6 +74,8 @@
 
                     <div class="track-info">
                         <h2 id="trackName">No Track Selected</h2>
+                        <p id="trackArtist" class="track-artist"></p>
+                        <p id="trackAlbum" class="track-album"></p>
                         <p id="trackMeta">Select a folder to start</p>
                     </div>
 

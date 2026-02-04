@@ -20,21 +20,34 @@ PalmPlay turns your webcam into a touch-free media controller. Whether you're us
 ## 🚀 Quick Start
 
 ### 1. Install Dependencies
+#### Backend
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Choose Your Interface
-
-#### 🌟 Option A: Modern Web App (Recommended)
-Launch the beautiful, feature-rich web interface:
+#### Frontend
 ```bash
-streamlit run app.py
+cd frontend
+npm install
 ```
-*Opens in your browser at `http://localhost:8501`*
+
+### 2. Run the Application
+You need to run **both** the backend and frontend terminals.
+
+#### Terminal 1: Backend
+```bash
+python server.py
+```
+
+#### Terminal 2: Frontend
+```bash
+cd frontend
+npm run dev
+```
+*Opens the modern playlist interface at `http://localhost:5173`*
 
 #### 🖥️ Option B: Classic Desktop App
-Run the lightweight CV window:
+Run the lightweight CV window (Legacy):
 ```bash
 python gesture_spotify_player.py
 ```

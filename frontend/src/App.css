@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #000000;
+    color: #ffffff;
+    @apply font-sans;
+  }
+
+  /* Utility to hide scrollbars but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes liquid-flow {
+  0% {
+    transform: translate(-20%, -20%) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(10%, 10%) rotate(180deg);
+  }
+
+  100% {
+    transform: translate(-20%, -20%) rotate(360deg);
+  }
+}
+
+@keyframes flow-vibrant {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(225, 29, 72, 0.2);
+    border-color: rgba(225, 29, 72, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(225, 29, 72, 0.5);
+    border-color: rgba(225, 29, 72, 0.8);
+  }
+}
+
+.liquid-glass {
+  background: rgba(40, 4, 12, 0.4);
+  backdrop-filter: blur(60px) saturate(250%);
+  -webkit-backdrop-filter: blur(60px) saturate(250%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.9),
+    inset 0 0 50px rgba(225, 29, 72, 0.1);
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.liquid-glass::after {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
+  background: radial-gradient(circle at center,
+      rgba(225, 29, 72, 0.3) 0%,
+      rgba(225, 29, 72, 0.1) 20%,
+      transparent 60%);
+  animation: liquid-flow 15s infinite ease-in-out;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+  z-index: 0;
+  will-change: transform;
+}
+
+.glass-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      transparent 30%,
+      transparent 70%,
+      rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.active-crimson {
+  background: rgba(225, 29, 72, 0.1) !important;
+  animation: glow-pulse 3s infinite ease-in-out;
+}
+
+.text-crimson {
+  color: #e11d48;
+}
+
+.bg-crimson {
+  background-color: #e11d48;
+}
+
+.progress-liquid {
+  height: 100%;
+  background: linear-gradient(90deg, #991b1b, #e11d48, #fb7185);
+  background-size: 200% 100%;
+  animation: liquid-flow 2s infinite linear;
+  border-radius: 9999px;
+}
+
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(225, 29, 72, 0.03), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+  animation: move-glow 40s infinite alternate ease-in-out;
+}
+
+.paused-animation,
+.paused-animation *:not(.no-pause) {
+  animation-play-state: paused !important;
+}
+
+@keyframes move-glow {
+  0% {
+    transform: translate(-10%, -10%) scale(1);
+  }
+
+  100% {
+    transform: translate(10%, 10%) scale(1.1);
+  }
+}
+
+.hover-micro {
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.25s ease-out !important;
+}
+
+.hover-micro:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 20px rgba(225, 29, 72, 0.25) !important;
+  cursor: pointer;
+}
+
+.hover-micro:active {
+  transform: scale(0.96) !important;
+  box-shadow: 0 0 5px rgba(225, 29, 72, 0.1) !important;
+  transition-duration: 0.1s !important;
+}
+
+.active-track-pulsing {
+  position: relative;
+  border-color: rgba(225, 29, 72, 0.4) !important;
+  background: rgba(225, 29, 72, 0.04) !important;
+}
+
+.active-track-pulsing::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid rgba(225, 29, 72, 0.3);
+  border-radius: inherit;
+  animation: pulse-border 3s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes pulse-border {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.01, 1.03);
+    opacity: 0;
+  }
+}

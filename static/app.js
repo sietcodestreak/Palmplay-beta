@@ -18,6 +18,8 @@ const elements = {
     gestureIndicator: document.getElementById('gestureIndicator'),
     coverArt: document.getElementById('coverArt'),
     trackName: document.getElementById('trackName'),
+    trackArtist: document.getElementById('trackArtist'),
+    trackAlbum: document.getElementById('trackAlbum'),
     trackMeta: document.getElementById('trackMeta'),
     progressFill: document.getElementById('progressFill'),
     shuffleBtn: document.getElementById('shuffleBtn'),
@@ -26,8 +28,14 @@ const elements = {
     nextBtn: document.getElementById('nextBtn'),
     repeatBtn: document.getElementById('repeatBtn'),
     volumeSlider: document.getElementById('volumeSlider'),
-    volumeValue: document.getElementById('volumeValue')
+    volumeValue: document.getElementById('volumeValue'),
+    sortAlpha: document.getElementById('sortAlpha'),
+    sortDuration: document.getElementById('sortDuration')
 };
+
+let currentSort = 'original'; // 'original', 'alpha', 'duration'
+let loadedTracks = [];
+let currentTrackIdx = -1;
 
 // API Functions
 async function api(endpoint, method = 'GET', body = null) {
@@ -84,19 +92,42 @@ async function refreshState() {
     const state = await api('/api/state');
     if (!state) return;
 
-    updatePlaylist(state.tracks, state.current_idx);
+    loadedTracks = state.tracks;
+    currentTrackIdx = state.current_idx;
+
+    updatePlaylist();
     updatePlayer(state);
     loadCoverArt(state.current_idx);
 }
 
 // Update playlist UI
-function updatePlaylist(tracks, currentIdx) {
-    elements.playlist.innerHTML = tracks.map((track, idx) => `
-        <div class="track-item ${idx === currentIdx ? 'active' : ''}" data-idx="${idx}">
-            <span class="icon">${idx === currentIdx ? '▶️' : '🎵'}</span>
-            <span class="name">${track.name}</span>
+function updatePlaylist() {
+    let displayTracks = [...loadedTracks].map((t, i) => ({ ...t, originalIdx: i }));
+
+    if (currentSort === 'alpha') {
+        displayTracks.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (currentSort === 'duration') {
+        const parseDur = (d) => {
+            if (!d) return 0;
+            const parts = d.split(':').map(Number);
+            return parts.length === 2 ? parts[0] * 60 + parts[1] : 0;
+        };
+        displayTracks.sort((a, b) => parseDur(a.duration) - parseDur(b.duration));
+    }
+
+    elements.playlist.innerHTML = displayTracks.map((track) => `
+        <div class="track-item ${track.originalIdx === currentTrackIdx ? 'active' : ''}" data-idx="${track.originalIdx}">
+            <span class="icon">${track.originalIdx === currentTrackIdx ? '▶️' : '🎵'}</span>
+            <div class="track-details">
+                <span class="name">${track.name}</span>
+                <span class="artist">${track.artist || 'Unknown Artist'}</span>
+            </div>
         </div>
     `).join('');
+
+    // Update active sort buttons
+    elements.sortAlpha.classList.toggle('active', currentSort === 'alpha');
+    elements.sortDuration.classList.toggle('active', currentSort === 'duration');
 
     // Add click handlers
     document.querySelectorAll('.track-item').forEach(item => {
@@ -106,7 +137,12 @@ function updatePlaylist(tracks, currentIdx) {
 
 // Update player UI
 function updatePlayer(state) {
+    const currentTrack = state.tracks[state.current_idx];
+
     elements.trackName.textContent = state.current_track || 'No Track Selected';
+    elements.trackArtist.textContent = currentTrack ? currentTrack.artist : '';
+    elements.trackAlbum.textContent = currentTrack ? currentTrack.album : '';
+
     elements.trackMeta.textContent = state.tracks.length > 0
         ? `Track ${state.current_idx + 1} of ${state.tracks.length}`
         : 'Select a folder to start';
@@ -120,14 +156,15 @@ function updatePlayer(state) {
 
 // Load cover art
 async function loadCoverArt(idx) {
-    const result = await api(`/api/cover/${idx}`);
-    if (result?.cover) {
-        elements.coverArt.src = result.cover;
-        elements.coverArt.classList.add('loaded');
-    } else {
+    if (idx < 0) {
         elements.coverArt.classList.remove('loaded');
         elements.coverArt.src = '';
+        return;
     }
+
+    const coverUrl = `/api/cover/${idx}?t=${Date.now()}`;
+    elements.coverArt.src = coverUrl;
+    elements.coverArt.classList.add('loaded');
 }
 
 // Play specific track
@@ -306,6 +343,16 @@ elements.repeatBtn.addEventListener('click', toggleRepeat);
 
 elements.volumeSlider.addEventListener('input', (e) => {
     setVolume(parseInt(e.target.value));
+});
+
+elements.sortAlpha.addEventListener('click', () => {
+    currentSort = currentSort === 'alpha' ? 'original' : 'alpha';
+    updatePlaylist();
+});
+
+elements.sortDuration.addEventListener('click', () => {
+    currentSort = currentSort === 'duration' ? 'original' : 'duration';
+    updatePlaylist();
 });
 
 // Initialize
