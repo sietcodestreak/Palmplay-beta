@@ -553,16 +553,23 @@ async def get_cover(idx: int):
     return JSONResponse({"error": "No cover"}, status_code=404)
 
 @app.post("/api/detect-gesture")
-async def detect_gesture(file: UploadFile = File(...)):
+def detect_gesture(file: UploadFile = File(...)):
     if hand_detector is None:
         return {"gesture": None, "error": "Hand detector not initialized"}
     
     try:
-        contents = await file.read()
+        # Use synchronous read since we're in a thread pool now
+        contents = file.file.read()
         nparr = np.frombuffer(contents, np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if frame is None: return {"gesture": None}
         
+        # Performance optimization: Resize frame if too large
+        h, w = frame.shape[:2]
+        if w > 640:
+            scale = 640 / w
+            frame = cv2.resize(frame, (0,0), fx=scale, fy=scale)
+            
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
         result = hand_detector.detect(mp_image)
@@ -585,6 +592,7 @@ async def detect_gesture(file: UploadFile = File(...)):
                     return {"gesture": "volume", "value": gesture[1]}
         return {"gesture": None}
     except Exception as e:
+        print(f"Gesture error: {e}")
         return {"gesture": None, "error": str(e)}
 
 # Serve the React production build

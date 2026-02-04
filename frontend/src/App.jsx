@@ -5,6 +5,7 @@ import Playlist from './components/Playlist';
 import Player from './components/Player';
 import LyricsPanel from './components/LyricsPanel';
 import QueuePanel from './components/QueuePanel';
+import GestureController from './components/GestureController';
 import {
   fetchState,
   playTrack,
@@ -244,6 +245,12 @@ function App() {
           onToggleLyrics={() => setShowLyrics(!showLyrics)}
         />
       )}
+
+      <GestureController
+        onGestureDetected={() => {
+          updateState();
+        }}
+      />
 
       {showLyrics && (
         <LyricsPanel
